@@ -82,3 +82,7 @@ The app will start at: **[http://127.0.0.1:5000/](http://127.0.0.1:5000/)**
 * **Backend**: Flask, Python, Google Generative AI SDK
 * **Frontend**: HTML, TailwindCSS, JavaScript
 * **Session Handling**: Flask sessions
+
+## 🌐 Live Demo
+👉 [Kautaliya](https://kautaliya.onrender.com)
+
