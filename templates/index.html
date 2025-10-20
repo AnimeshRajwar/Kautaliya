@@ -195,5 +195,23 @@
   <div id="sidebarOverlay" class="lg:hidden fixed inset-0 bg-black/50 backdrop-blur-sm z-30 hidden"></div>
 
   <script src="/static/script.js"></script>
+  <script>
+    async function sendMessage() {
+        const message = document.getElementById("userInput").value.trim();
+        if (!message) return;
+
+        const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+        const response = await fetch("/chat", {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({ message, timezone })
+        });
+
+        const data = await response.json();
+        console.log(data.response);
+    }
+    </script>
+
 </body>
 </html>
