@@ -119,7 +119,8 @@ class KautaliyaChat {
             
             if (response.ok) {
                 this.removeTypingIndicator();
-                this.addMessage(data.response, 'assistant', false, data.timestamp);
+                const localTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                this.addMessage(data.response, 'assistant', false, localTime);
             } else {
                 this.removeTypingIndicator();
                 this.addMessage(data.error || 'Sorry, something went wrong. Please try again.', 'assistant', true);
@@ -137,9 +138,7 @@ class KautaliyaChat {
     addMessage(content, role, isError = false, customTimestamp = null) {
         const messageDiv = document.createElement('div');
         const isUser = role === 'user';
-        const timestamp = customTimestamp
-            ? new Date(customTimestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-            : new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        const timestamp = customTimestamp || new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
         this.messageCount++;
 
