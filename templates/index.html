@@ -4,91 +4,196 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Kautaliya - AI Assistant</title>
+  <link rel="icon" href="https://public-frontend-cos.metadl.com/mgx/img/favicon.png" type="image/png">
   <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="/static/style.css">
   <script>
     tailwind.config = {
       theme: {
         extend: {
           colors: {
-            'chat-bg': '#1e1f25',
-            'user-msg': '#0ea36f',
-            'ai-msg': '#2f3139',
-            'saffron': '#ff9933',
-            'deep-blue': '#0a1f44'
+            'chat-bg': '#0a0b0f',
+            'sidebar-bg': '#111218',
+            'user-msg': '#6366f1',
+            'ai-msg': '#1f2937',
+            'saffron': '#f59e0b',
+            'deep-blue': '#1e293b',
+            'accent': '#8b5cf6',
+            'glass': 'rgba(255, 255, 255, 0.1)'
+          },
+          backdropBlur: {
+            'xs': '2px',
+          },
+          animation: {
+            'float': 'float 6s ease-in-out infinite',
+            'glow': 'glow 2s ease-in-out infinite alternate',
+            'slide-up': 'slideUp 0.5s ease-out',
+            'fade-in': 'fadeIn 0.3s ease-out',
+            'bounce-subtle': 'bounceSubtle 0.6s ease-out',
           }
         }
       }
     }
   </script>
 </head>
-<body class="bg-chat-bg text-white h-screen flex overflow-hidden">
+<body class="bg-gradient-to-br from-chat-bg via-gray-900 to-sidebar-bg text-white h-screen flex overflow-hidden">
+  <!-- Background Effects -->
+  <div class="fixed inset-0 overflow-hidden pointer-events-none">
+    <div class="absolute top-1/4 left-1/4 w-96 h-96 bg-accent/20 rounded-full blur-3xl animate-float"></div>
+    <div class="absolute bottom-1/4 right-1/4 w-80 h-80 bg-saffron/20 rounded-full blur-3xl animate-float" style="animation-delay: -3s;"></div>
+    <div class="absolute top-3/4 left-1/2 w-64 h-64 bg-user-msg/20 rounded-full blur-3xl animate-float" style="animation-delay: -1.5s;"></div>
+  </div>
 
 
-  <aside class="w-64 bg-deep-blue border-r border-gray-700 flex flex-col">
-    <div class="p-4 border-b border-gray-700">
-      <h1 class="text-xl font-bold text-saffron">Kautaliya</h1>
-      <p class="text-xs text-gray-400">AI Assistant</p>
+
+  <!-- Sidebar -->
+  <aside id="sidebar" class="w-80 bg-glass backdrop-blur-xl border-r border-white/10 flex flex-col shadow-2xl lg:relative fixed inset-y-0 left-0 z-40 transform -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out">
+    <div class="p-6 border-b border-white/10 bg-gradient-to-r from-saffron/20 to-accent/20 backdrop-blur-md">
+      <div class="flex items-center space-x-3">
+        <div class="w-12 h-12 bg-gradient-to-br from-saffron to-orange-500 rounded-xl flex items-center justify-center shadow-lg animate-glow">
+          <span class="text-xl font-bold text-white">K</span>
+        </div>
+        <div>
+          <h1 class="text-2xl font-bold bg-gradient-to-r from-saffron to-orange-400 bg-clip-text text-transparent">Kautaliya</h1>
+          <p class="text-sm text-gray-300">AI Assistant</p>
+        </div>
+      </div>
     </div>
 
-
-    <div id="chatLogs" class="flex-1 overflow-y-auto p-4 space-y-2 text-sm">
-      <p class="text-gray-400 italic">No questions yet...</p>
+    <!-- Chat History -->
+    <div class="flex-1 overflow-hidden flex flex-col">
+      <div class="p-4 border-b border-white/10">
+        <h3 class="text-sm font-semibold text-gray-300 mb-2">Recent Conversations</h3>
+      </div>
+      <div id="chatLogs" class="flex-1 overflow-y-auto p-4 space-y-2 text-sm custom-scrollbar">
+        <div class="flex items-center justify-center h-32 text-gray-400 italic">
+          <div class="text-center">
+            <svg class="w-8 h-8 mx-auto mb-2 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
+            </svg>
+            <p>No conversations yet</p>
+          </div>
+        </div>
+      </div>
     </div>
 
-    <div class="p-4 border-t border-gray-700 text-xs text-gray-400">
-      <p>Inspired by Chanakya’s wisdom</p>
+    <!-- Footer -->
+    <div class="p-4 border-t border-white/10 bg-glass backdrop-blur-md">
+      <div class="text-xs text-gray-400 text-center">
+        <p class="mb-1">Inspired by Chanakya's wisdom</p>
+        <p class="text-saffron">Created by Animesh Singh Rajwar</p>
+      </div>
     </div>
   </aside>
 
+  <!-- Main Content -->
+  <main class="flex-1 flex flex-col relative">
+    <!-- Header -->
+    <header class="bg-glass backdrop-blur-xl border-b border-white/10 p-4 shadow-lg">
+      <div class="flex items-center justify-between gap-3 min-w-0">
 
-  <main class="flex-1 flex flex-col">
+        <!-- Left: Mobile Menu Button -->
+        <button id="mobileMenuBtn"
+          class="lg:hidden flex-shrink-0 flex items-center justify-center bg-glass backdrop-blur-md border border-white/20 text-white p-3 rounded-xl shadow-lg hover:bg-white/20 transition-all duration-300">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                  d="M4 6h16M4 12h16M4 18h16"></path>
+          </svg>
+        </button>
 
-    <header class="bg-gradient-to-r from-saffron to-orange-600 p-4 shadow-md flex items-center justify-between">
-      <h2 class="text-lg font-semibold">Chat with Kautaliya</h2>
-      <button id="clearChatBtn" class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-md text-sm transition">
-        Clear
-      </button>
+        <!-- Center: Title and Subtitle -->
+        <div class="flex items-center justify-center flex-1 min-w-0 space-x-3 text-center lg:text-left">
+          <h2 class="text-xl font-semibold text-white truncate">Chat with Kautaliya</h2>
+          <span class="hidden sm:inline text-sm text-gray-400 flex-shrink-0">Your AI companion</span>
+        </div>
+
+        <!-- Right: Clear Button -->
+        <button id="clearChatBtn"
+          class="group flex-shrink-0 bg-glass backdrop-blur-md border border-red-400/30 hover:border-red-400/60 text-red-400 hover:text-red-300 px-4 py-2 rounded-xl text-sm transition-all duration-300 shadow-md hover:shadow-lg hover:bg-red-500/10 flex items-center space-x-2">
+          <svg class="w-4 h-4 transition-transform group-hover:scale-110" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+          </svg>
+          <span class="hidden sm:inline">Clear Chat</span>
+        </button>
+      </div>
     </header>
 
 
-    <section id="messagesContainer" class="flex-1 overflow-y-auto p-6 space-y-4">
 
-      <div class="flex items-start space-x-3">
-        <div class="w-8 h-8 bg-gradient-to-r from-purple-500 to-blue-500 rounded-full flex items-center justify-center">
+
+    <!-- Messages Container -->
+    <section id="messagesContainer" class="flex-1 overflow-y-auto p-6 space-y-6 custom-scrollbar">
+      <!-- Welcome Message -->
+      <div class="flex items-start space-x-4 animate-fade-in">
+        <div class="w-10 h-10 bg-gradient-to-br from-accent to-purple-600 rounded-xl flex items-center justify-center shadow-lg flex-shrink-0">
           <span class="text-sm font-bold">K</span>
         </div>
-        <div class="bg-ai-msg rounded-2xl p-4 max-w-xl shadow">
-          <p class="text-gray-100">Hello! I'm Kautaliya, your AI assistant. How can I help you today?</p>
+        <div class="bg-glass backdrop-blur-md border border-white/20 rounded-2xl p-5 max-w-2xl shadow-xl">
+          <div class="message-content text-gray-100">
+            <p class="mb-2">👋 Hello! I'm <strong>Kautaliya</strong>, your AI assistant.</p>
+            <p>I'm here to help you with questions, provide insights, and engage in meaningful conversations. How can I assist you today?</p>
+          </div>
+          <div class="text-xs text-gray-400 mt-3 flex items-center">
+            <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+            Just now
+          </div>
         </div>
       </div>
     </section>
 
-
-    <footer class="p-4 border-t border-gray-700 bg-gray-900">
-      <div class="max-w-4xl mx-auto flex items-end space-x-3">
-        <textarea id="messageInput"
-          placeholder="Type your message..."
-          class="flex-1 bg-gray-800 text-white rounded-2xl p-4 resize-none focus:outline-none focus:ring-2 focus:ring-saffron max-h-32"
-          rows="1"></textarea>
-        <button id="sendBtn"
-          class="bg-saffron hover:bg-orange-400 text-black p-3 rounded-full transition disabled:bg-gray-600 disabled:cursor-not-allowed"
-          disabled>
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path>
-          </svg>
-        </button>
+    <!-- Input Area -->
+    <footer class="p-4 border-t border-white/10 bg-glass backdrop-blur-xl">
+      <div class="max-w-4xl mx-auto">
+        <div class="flex items-end space-x-4">
+          <div class="flex-1 relative">
+            <textarea id="messageInput"
+              placeholder="Type your message here..."
+              class="w-full bg-glass backdrop-blur-md border border-white/20 text-white rounded-2xl p-4 pr-12 resize-none focus:outline-none focus:ring-2 focus:ring-saffron/50 focus:border-saffron/50 max-h-32 placeholder-gray-400 shadow-lg transition-all duration-300"
+              rows="1"></textarea>
+            <div class="absolute right-3 bottom-3 text-gray-400">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                 d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+              </svg>
+            </div>
+          </div>
+          <button id="sendBtn"
+            class="group relative bg-gradient-to-r from-saffron to-orange-500 hover:from-orange-500 hover:to-orange-600 disabled:from-gray-600 disabled:to-gray-700 text-white p-4 rounded-2xl transition-all duration-300 disabled:cursor-not-allowed shadow-lg hover:shadow-xl transform hover:scale-105 disabled:transform-none disabled:opacity-50 flex items-center justify-center min-w-[56px] h-14"
+            disabled>
+            <svg class="w-5 h-5 transition-transform group-hover:translate-x-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path>
+            </svg>
+          </button>
+        </div>
+        <div class="mt-2 text-xs text-gray-400 text-center">
+          Press <kbd class="px-2 py-1 bg-gray-700 rounded text-xs">Enter</kbd> to send • <kbd class="px-2 py-1 bg-gray-700 rounded text-xs">Shift + Enter</kbd> for new line
+        </div>
       </div>
     </footer>
   </main>
 
-
-  <div id="loadingIndicator" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-    <div class="bg-gray-800 rounded-lg p-6 flex items-center space-x-3">
-      <div class="animate-spin rounded-full h-6 w-6 border-b-2 border-saffron"></div>
-      <span>Kautaliya is thinking...</span>
+  <!-- Loading Overlay -->
+  <div id="loadingIndicator" class="hidden fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50">
+    <div class="bg-glass backdrop-blur-xl border border-white/20 rounded-2xl p-8 flex items-center space-x-4 shadow-2xl">
+      <div class="relative">
+        <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-saffron"></div>
+        <div class="absolute inset-0 animate-ping rounded-full h-8 w-8 border border-saffron/30"></div>
+      </div>
+      <div>
+        <p class="font-medium">Kautaliya is thinking...</p>
+        <p class="text-sm text-gray-400">Please wait a moment</p>
+      </div>
     </div>
   </div>
 
-  <script src="{{ url_for('static', filename='script.js') }}"></script>
+  <!-- Overlay for mobile sidebar -->
+  <div id="sidebarOverlay" class="lg:hidden fixed inset-0 bg-black/50 backdrop-blur-sm z-30 hidden"></div>
+
+  <script src="/static/script.js"></script>
 </body>
 </html>

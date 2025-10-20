@@ -3,13 +3,15 @@ import google.generativeai as genai
 import os
 from datetime import datetime
 import uuid
+from dotenv import load_dotenv 
+
+load_dotenv()
 
 app = Flask(__name__)
 app.secret_key = 'Spare159'  
 
-GEMINI_API_KEY = os.getenv('GEMINI_API_KEY', 'your-gemini-api-key-here')
+GEMINI_API_KEY = os.getenv('GEMINI_API_KEY')
 genai.configure(api_key=GEMINI_API_KEY)
-
 
 model = genai.GenerativeModel('gemini-2.5-flash')
 
